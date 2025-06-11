@@ -1,105 +1,39 @@
-Proyecto Todo Camisetas
-Índice
-Descripción General
-Arquitectura
-Estructura de Carpetas
-Base de Datos
-API REST
-Camisetas
-Clientes
-Precios de Oferta
-Lógica de Negocio
-Ejemplos de Uso
-Autores
-Descripción General
-Todo Camisetas es un sistema backend para la gestión mayorista de camisetas de fútbol, orientado a ventas B2B. Permite administrar productos, clientes y precios de oferta personalizados, calculando dinámicamente el precio final según la categoría del cliente y sus descuentos.
+# Todo Camisetas
 
-Arquitectura
-Backend: Node.js + Express
-Base de datos: MariaDB/MySQL
-Modelo de datos: Relacional, con tablas para camisetas, clientes y precios de oferta.
-API: RESTful, CRUD completo para cada entidad principal.
-Estructura de Carpetas
-app.js
-Archivo principal que inicializa la aplicación Express y monta los routers.
+**Todo Camisetas** es una empresa fundada en 2023 y con sede en Santiago, Chile. Es un proveedor mayorista especializado en camisetas de fútbol de clubes nacionales e internacionales. Sus fundadores, Matías López y Camila Fuentes, detectaron que muchos vendedores locales carecían de acceso directo a productos de calidad a precios competitivos, por lo que decidieron crear un modelo de negocio basado en ventas B2B a tiendas minoristas en varias regiones del país.
 
-basedatos/
-Contiene el script SQL para crear y poblar la base de datos.
+---
 
-controllers/
-Lógica de negocio y controladores para cada entidad (camiseta, cliente, precio de oferta).
+## API: Funcionalidades CRUD
 
-models/
-Modelos de datos y funciones para interactuar con la base de datos.
+### 1. Gestión de Camisetas (Stock)
 
-routers/
-Rutas de la API REST y router principal.
+CRUD completo de productos, donde cada “camiseta” tiene los siguientes atributos:
 
-README.md
-Documentación general del proyecto.
+- **Título:** Nombre descriptivo (ejemplo: “Camiseta Local 2025 – Selección Chilena”)
+- **Club:** Nombre del club al que pertenece (ejemplo: “Selección Chilena”)
+- **País:** Procedencia del diseño (ejemplo: “Chile”, “España”)
+- **Tipo:** Clasificación del modelo (ejemplo: “Local”, “Visita”, “3era Camiseta”, “Femenino Local”, “Niño”)
+- **Color:** Combinación principal de colores (ejemplo: “Blanco y Negro”)
+- **Precio:** Valor base en pesos chilenos (ejemplo: 45 000)
+- **Tallas disponibles:** Una o varias tallas asociadas (ejemplo: “S”, “M”, “L”, “XL”)
+- **Detalles:** Texto adicional (ejemplo: “Edición aniversario 2025”)
+- **Código de Producto:** SKU único (ejemplo: “SCL2025L”)
 
-Base de Datos
-Tablas principales:
+### 2. Gestión de Clientes
 
-camiseta: Información de cada producto.
-cliente: Datos de clientes B2B.
-preciodeoferta: Precios personalizados por cliente y camiseta.
-Consulta el archivo bdtodocamisetas.sql para el detalle de la estructura.
+CRUD completo de clientes B2B, almacenando:
 
-API REST
-Camisetas
-GET /api/camisetas
-Lista todas las camisetas.
-POST /api/camisetas/create
-Crea una nueva camiseta.
-PUT /api/camisetas/update
-Actualiza una camiseta existente.
-DELETE /api/camisetas/remove
-Elimina una camiseta.
-Atributos de camiseta:
-Título, Club, País, Tipo, Color, Precio, Tallas disponibles, Detalles, Código de producto.
+- **Nombre Comercial:** (ejemplo: “90minutos”)
+- **RUT o ID Comercial:** Identificador tributario
+- **Dirección:** Ciudad y región (ejemplo: “Providencia, Santiago”)
+- **Categoría:** “Regular” o “Preferencial”
+- **Contacto:** Nombre y correo del encargado de compras
+- **Porcentaje de oferta:** Campo que permite obtener un descuento en porcentaje para los clientes en todos los productos
 
-Clientes
-GET /api/clientes
-Lista todos los clientes.
-POST /api/clientes/create
-Crea un nuevo cliente.
-PUT /api/clientes/update
-Actualiza un cliente existente.
-DELETE /api/clientes/remove
-Elimina un cliente.
-Atributos de cliente:
-Nombre comercial, RUT o ID comercial, Dirección, Categoría (Regular/Preferencial), Contacto (nombre y correo), Porcentaje de oferta.
+### 3. Logística de Precios de Oferta
 
-Precios de Oferta
-GET /api/preciodeoferta
-Lista todos los precios de oferta.
-POST /api/preciodeoferta
-Crea un precio de oferta personalizado.
-PUT /api/preciodeoferta
-Actualiza el precio de oferta según la lógica de negocio.
-DELETE /api/preciodeoferta
-Elimina un precio de oferta.
-Lógica de Negocio
-El precio final de una camiseta para un cliente se calcula así:
-Si el cliente es preferencial y tiene un porcentaje de oferta, el precio final es el precio base menos el porcentaje de descuento.
-Si el cliente es regular o no tiene oferta, el precio final es el precio base.
-Los precios de oferta se almacenan en la tabla preciodeoferta y se recalculan automáticamente al actualizar los datos del cliente o producto.
-Ejemplo de Uso
-Crear una camiseta:
+La API debe calcular dinámicamente el precio final de una camiseta según el cliente que realiza la consulta:
 
-POST /api/camisetas/create
-{
-  "titulobigint": "Camiseta Local 2025",
-  "club": "Deportivo Cali",
-  "pais": "Colombia",
-  "tipo": "Local",
-  "color": "Blanco",
-  "precio": 30000,
-  "tallasdisponibles": "S,M,L,XL",
-  "detalles": "Edición especial",
-  "codigodeproducto": "COLCAL2025L"
-}
-Autores
-ALEJANDRO GAMBIN FAJARDO
-FREDERICK GIOVANNI IRIBARREN BARRAZA
+- Si el `cliente_id` corresponde a “90minutos” (Categoría Preferencial) y la camiseta tiene `precio_oferta` definido, entonces el sistema debe devolver, al consultar el recurso, el campo `precio_final` igual a dicho `precio_oferta`.
+- Si el `cliente_id` corresponde a “tdeportes” (Categoría Regular) o no existe ninguna oferta para esa camiseta, el sistema debe devolver `precio_final` igual a `precio` (precio base).
