@@ -21,10 +21,10 @@ const Preciosdeoferta = {
                  SELECT c.id AS id_camiseta,cl.id AS id_cliente, 
                  CASE 
                  WHEN cl.categoria = 'preferencial' AND cl.\`porcentaje de oferta\` IS NOT NULL 
-                 THEN ca.precio - (ca.precio * cl.\`porcentaje de oferta\` / 100) 
-                 ELSE ca.precio END AS precio 
-                 FROM camiseta ca JOIN cliente cl ON cl.id = ? 
-                 WHERE ca.id = ? 
+                 THEN c.precio - (c.precio * cl.\`porcentaje de oferta\` / 100) 
+                 ELSE c.precio END AS precio 
+                 FROM camiseta as c JOIN cliente cl ON cl.id = ? 
+                 WHERE c.id = ? 
                 `, [preciodeoferta.id_cliente, preciodeoferta.id_camiseta]
             );
             console.log('preciodeoferta creada:');
@@ -52,7 +52,7 @@ const Preciosdeoferta = {
                     ELSE ca.precio
                 END
                 WHERE po.id_camiseta = ? AND po.id_cliente = ?`,
-                [preciodeoferta.id_cliente, preciodeoferta.id_camiseta]
+                [preciodeoferta.id_camiseta, preciodeoferta.id_cliente]
             );
             console.log('camiseta actualizada:');
             if (rows.affectedRows > 0) {
@@ -86,4 +86,4 @@ const Preciosdeoferta = {
         }
     }
 };
-module.exports = Preciodeoferta;
+module.exports = Preciosdeoferta;
