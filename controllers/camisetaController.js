@@ -14,7 +14,44 @@ const getAll = async (req, res) => {
             error: 'Error interno del servidor' 
         }); 
     } 
-}; 
+};
+const create = async (req,res)=>{
+    try{
+        const camiseta =req.body;
+        const result = await Camisetas.create(camiseta);
+        res.status(201).json(result);
+    }catch(err){
+        console.error('Error e el controlador de camisetas:',err);
+        return res.status(500).json({
+            error: 'Error interno del servidor'
+        });
+    }
+};
+const update = async(req,res)=>{
+    try{
+        const camiseta = req.body;
+        const result= await Camisetas.update(camiseta);
+        res.status(200).json(result);
+    }catch(err){
+        console.error('Error en el controlador de camisetas:',err);
+        return res.status(500).json({
+            error: 'error interno del servidor'
+        });
+    }
+};
+const remove = async (req,res)=>{
+    try{
+        const camiseta= req.body;
+        const result= await Camisetas.remove(camiseta);
+        res.status(200).json(result);
+    }
+    catch(err){
+        console.error('Error en el controlador de camiseta:',err);
+        return res.status(500).json({
+            error:'error interno del servidor'
+        })
+    }
+};
 module.exports = {
-    getAll
+    getAll , create, update, remove
 }

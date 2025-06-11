@@ -16,8 +16,8 @@ const Camisetas = {
     },
     create: async (camiseta) => {
         try {
-            const [rows] = await db.query
-            ('insert into camiseta(titulobigint,club,pais,tipo,color,precio,tallasdisponibles,detalles,codigodeproducto) VALUES(?,?,?,?,?,?,?,?,?)',
+            const [rows] = await db.query(
+            'insert into camiseta(titulobigint, club, pais, tipo, color, precio, `tallas disponibles`,detalles,`codigo de producto`) VALUES(?,?,?,?,?,?,?,?,?)',
             [camiseta.titulobigint, camiseta.club, camiseta.pais, camiseta.tipo, camiseta.color, camiseta.precio, camiseta.tallasdisponibles, camiseta.detalles, camiseta.codigodeproducto]
             );
             console.log('Camiseta creada:');
@@ -35,7 +35,7 @@ const Camisetas = {
     update: async(camiseta)=>{
         try{
             const[rows] = await db.query(
-                ' update camistea set titulobigint =?,club=?,pais=?,tipo=?,color=?,precio=?,tallasdisponibles=?,detalles=?,codigodeproducto=? where id=?',
+                'update camiseta set titulobigint =?,club=?,pais=?,tipo=?,color=?,precio=?,`tallas disponibles`=?,detalles=?,`codigo de producto`=? where id=?',
                 [camiseta.titulobigint, camiseta.club, camiseta.pais, camiseta.tipo, camiseta.color, camiseta.precio, camiseta.tallasdisponibles, camiseta.detalles, camiseta.codigodeproducto, camiseta.id]
             );
             console.log('camiseta actualizada:');
@@ -53,7 +53,7 @@ const Camisetas = {
          try { 
             // Elimina el registro según el email recibido 
             const [rows] = await db.query( 
-                'DELETE FROM camiseta WHERE codigodeproducto = ?',  
+                'DELETE FROM camiseta WHERE `codigo de producto`= ?',  
                 [camiseta.codigodeproducto] 
             ); 
             console.log('camiseta eliminada:'); 
