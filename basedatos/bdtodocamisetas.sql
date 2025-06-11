@@ -17,7 +17,7 @@ CREATE TABLE `cliente`(
     `direccion` BIGINT NOT NULL,
     `categoria` BIGINT NOT NULL,
     `contacto` BIGINT NOT NULL,
-    `porcentaje de oferta` BIGINT NOT NULL
+    `porcentaje de oferta` BIGINT 
 );
 CREATE TABLE `preciodeoferta`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
